@@ -312,12 +312,38 @@
         // Gather form data and send to Formspree via fetch
         var form = document.getElementById("contactForm");
         var formData = new FormData(form);
-        formData.append("_subject", "Motion Drivers Ed contact form");
+        var email = document.getElementById("cemail").value.trim();
+        var name = document.getElementById("cname").value.trim();
+        var message = document.getElementById("cmessage").value.trim();
+        
+        // Set reply-to to the user's email to avoid spam
+        formData.set("_replyto", email);
+        formData.set("_format", "plain");
+        formData.set("_subject", "Motion Drivers Ed - Contact Form: " + name + " (" + email + ")");
+        formData.set("_cc", "motiondriversed@gmail.com");
+        formData.set("_to", "motiondriversed@gmail.com");
+        
+        // Update the hidden replyto field
+        var replytoField = document.getElementById("replyto_email");
+        if (replytoField) {
+            replytoField.value = email;
+        }
+        
+        // Update the subject field
+        var subjectField = document.getElementById("form_subject");
+        if (subjectField) {
+            subjectField.value = "Motion Drivers Ed - Contact Form: " + name + " (" + email + ")";
+        }
+        
+        // Set Content-Type header properly
+        var headers = new Headers();
+        headers.append("Accept", "application/json");
 
         fetch("https://formspree.io/f/mblnzjqq", {
             method: "POST",
-            headers: { "Accept": "application/json" },
-            body: formData
+            headers: headers,
+            body: formData,
+            mode: "cors"
         }).then(function(response) {
             if (response.ok) {
                 cformSuccess();
@@ -435,3 +461,283 @@
 	});
 
 })(jQuery);
+
+
+/* ============================================
+   Motion Drivers Ed - Custom Functionality
+   ============================================ */
+
+// Function to handle all .btn-book clicks - CSP compliant (no inline scripts)
+// Make setupBookButtons globally accessible for table generation script
+window.setupBookButtons = function() {
+    const buttons = document.querySelectorAll('.btn-book');
+    
+    // Log for debugging (can be removed in production)
+    if (buttons.length === 0) {
+        console.log('No .btn-book elements found');
+        return;
+    }
+    
+    buttons.forEach(btn => {
+        // Check if already has listener
+        if (btn.hasAttribute('data-listener-attached')) {
+            return;
+        }
+        btn.setAttribute('data-listener-attached', 'true');
+        
+        // Use capture phase to ensure we catch the event early
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const d = this.dataset;
+            
+            // Try both camelCase and lowercase versions
+            const serviceId = d.serviceId || d.serviceid;
+            const serviceName = d.serviceName || d.servicename || 'Service';
+            const servicePrice = d.servicePrice || d.serviceprice || '0';
+            const squareUrl = d.squareUrl || d.squareurl || '';
+
+            // Console log for debugging
+            console.log('Button clicked - Extracted data attributes:', {
+                serviceId: serviceId,
+                serviceName: serviceName,
+                servicePrice: servicePrice,
+                squareUrl: squareUrl,
+                fullDataset: d
+            });
+
+            if (!serviceId) {
+                console.error('Missing service ID', d);
+                alert('Error: Missing service information. Please try again.');
+                return false;
+            }
+
+            // Ensure all values are strings and properly encoded
+            const cleanId = String(serviceId).trim();
+            const cleanName = String(serviceName).trim();
+            const cleanPrice = String(servicePrice).trim();
+            const cleanSquare = squareUrl ? String(squareUrl).trim() : '';
+
+            // Validate that we have required values
+            if (!cleanId || cleanId === 'undefined' || cleanId === 'null') {
+                console.error('Invalid service ID:', cleanId);
+                alert('Error: Invalid service information. Please try again.');
+                return false;
+            }
+
+            // Use current page location as base to preserve subdirectory path
+            const url = new URL('register.html', window.location.href);
+            url.searchParams.set('id', cleanId);
+            url.searchParams.set('name', cleanName);
+            url.searchParams.set('price', cleanPrice);
+            if (cleanSquare) {
+                url.searchParams.set('square', cleanSquare);
+            }
+
+            // Console log final URL before redirect
+            console.log('Navigating to register.html with URL:', url.toString());
+            console.log('URL search params (individual):', {
+                id: url.searchParams.get('id'),
+                name: url.searchParams.get('name'),
+                price: url.searchParams.get('price'),
+                square: url.searchParams.get('square')
+            });
+            console.log('URL search string:', url.search);
+
+            window.location.href = url.toString();
+            return false;
+        }, true);
+    });
+    
+    // Log success (can be removed in production)
+    console.log('Attached listeners to', buttons.length, 'button(s)');
+};
+
+// Setup function with retry mechanism for reliability
+function initializeBookButtons() {
+    // Always use DOMContentLoaded to ensure DOM is fully parsed
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            window.setupBookButtons();
+            // Retry after a short delay to catch any late-rendering elements
+            setTimeout(window.setupBookButtons, 100);
+        });
+    } else {
+        // DOM is already ready, setup immediately
+        window.setupBookButtons();
+        // Retry after a short delay as a safety net
+        setTimeout(window.setupBookButtons, 100);
+    }
+}
+
+// Initialize immediately
+initializeBookButtons();
+
+// Re-setup after dynamic content is added (for table rows)
+const observer = new MutationObserver(function(mutations) {
+    let shouldSetup = false;
+    mutations.forEach(function(mutation) {
+        if (mutation.addedNodes.length) {
+            mutation.addedNodes.forEach(function(node) {
+                if (node.nodeType === 1) {
+                    if (node.classList && node.classList.contains('btn-book')) {
+                        shouldSetup = true;
+                    } else if (node.querySelector && node.querySelector('.btn-book')) {
+                        shouldSetup = true;
+                    }
+                }
+            });
+        }
+    });
+    if (shouldSetup) {
+        // Call immediately and also with a small delay for safety
+        window.setupBookButtons();
+        setTimeout(window.setupBookButtons, 50);
+    }
+});
+
+// Start observing immediately if body exists, otherwise wait for it
+function startObserver() {
+    if (document.body) {
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    } else {
+        // Wait for body to exist
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', startObserver);
+        } else {
+            // Fallback: check again after a short delay
+            setTimeout(startObserver, 50);
+        }
+    }
+}
+
+startObserver();
+
+
+// Generate class schedule table
+document.addEventListener('DOMContentLoaded', function() {
+    const tbody = document.getElementById('classRows');
+    if (!tbody) {
+        return; // Exit if table doesn't exist on this page
+    }
+    
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Helper: Get first Monday of a given month/year
+    const getFirstMonday = (year, month) => {
+        const firstDay = new Date(year, month, 1);
+        const dayOfWeek = firstDay.getDay(); // 0 = Sun, 1 = Mon
+        const diff = dayOfWeek === 1 ? 0 : (8 - dayOfWeek) % 7;
+        return new Date(year, month, 1 + diff);
+    };
+
+    // Helper: Add days to a date
+    const addDays = (date, days) => new Date(date.getTime() + days * 86400000);
+
+    // Generate next 12 classes starting from *next month*
+    const currentYear = today.getFullYear();
+    const currentMonth = today.getMonth(); // 0-11
+
+    const classes = [];
+    let year = currentYear;
+    let month = currentMonth; // start from current month
+
+    // Start from *next month* if we're past the first Monday
+    const firstMondayThisMonth = getFirstMonday(year, month);
+    if (today > firstMondayThisMonth) {
+        month++;
+        if (month > 11) { month = 0; year++; }
+    }
+
+    // Generate 12 future classes
+    for (let i = 0; i < 12; i++) {
+        const start = getFirstMonday(year, month);
+        const end = addDays(start, 38); // 6 weeks = 42 days, minus weekends → ~38 days
+        const permit = addDays(end, 2); // 2 days after end
+
+        const isCurrentMonth = start.getMonth() === today.getMonth() && start.getFullYear() === today.getFullYear();
+        const randomCurrentCapacity = Math.floor(Math.random() * (27 - 17 + 1)) + 17;
+        const capacity = isCurrentMonth ? randomCurrentCapacity : 20;
+
+        classes.push({ start, end, permit, capacity });
+
+        // Next month
+        month++;
+        if (month > 11) { month = 0; year++; }
+    }
+
+    // Filter: only future classes, take first 5
+    const upcoming = classes
+        .filter(cls => cls.start >= today)
+        .slice(0, 5);
+
+    if (upcoming.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 2rem; color: #888;">
+            No upcoming classes. New sessions start monthly!
+        </td></tr>`;
+        return;
+    }
+
+    // Format date
+    const fmt = d => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+    upcoming.forEach((cls, i) => {
+        const startStr = fmt(cls.start);
+        const endStr = fmt(cls.end);
+        const permitStr = fmt(cls.permit);
+
+        const isNext = i === 0;
+        const status = isNext ? 'Filling Fast' : 'Available';
+        const statusClass = isNext ? 'status-filling' : 'status-available';
+
+        const id = `class-${cls.start.getMonth() + 1}-${cls.start.getFullYear()}`;
+        const name = `Driver Education Class: ${startStr.split(', ')[0]} - ${endStr.split(', ')[0]}, ${cls.start.getFullYear()}`;
+
+        // Console log for debugging table generation
+        console.log('Generating table row:', {
+            'data-service-id': id,
+            'data-service-name': name,
+            'data-service-price': '595',
+            'data-square-url': 'https://square.link/u/hel5wnyU'
+        });
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+    <td data-label="Program">
+        <strong>${startStr.split(', ')[0]} - ${endStr.split(', ')[0]}</strong>
+        <div class="status-badge ${statusClass}">${status}</div>
+    </td>
+    <td data-label="Price"><div class="price">595</div></td>
+    <td data-label="Capacity">
+        <span class="capacity">
+            <i class="fas fa-user-friends"></i>
+            ${cls.capacity} Students
+        </span>
+    </td>
+    <td data-label="Permit Test"><span class="permit-date">${permitStr}</span></td>
+    <td data-label="Action">
+        <a href="register.html" class="btn-solid-reg btn-book"
+           data-service-id="${id}"
+           data-service-name="${name}"
+           data-service-price="595"
+           data-square-url="https://square.link/u/hel5wnyU">
+           Register
+        </a>
+    </td>
+`;
+        tbody.appendChild(row);
+    });
+
+    // Re-attach Register button handler after table is populated
+    // The MutationObserver will handle this, but we'll also call it directly for immediate setup
+    setTimeout(function() {
+        if (typeof window.setupBookButtons === 'function') {
+            window.setupBookButtons();
+        }
+    }, 100);
+});

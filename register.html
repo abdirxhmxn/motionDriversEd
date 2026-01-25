@@ -5,7 +5,9 @@
     <!-- Basic Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://www.motiondriversed.com; font-src 'self' https://fonts.gstatic.com https://fonts.googleapis.com; connect-src 'self' https://formspree.io; frame-src 'self' https://square.link;">
     <!-- Page Title (Critical for SEO & CTR) -->
     <title>Register for Driving Lessons | Motion Drivers Ed - Book Your Class or Road Test Prep</title>
 
@@ -57,8 +59,8 @@
     <!-- CSS Files -->
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/fontawesome-all.css" rel="stylesheet">
-    <link href="css/styles.css" rel="stylesheet">
-
+    <!-- <link href="css/styles.css" rel="stylesheet"> -->
+<link href="css/register.css?v=2" rel="stylesheet">
     <!-- Structured Data (JSON-LD) - Helps Google show rich results -->
     <script type="application/ld+json">
     {
@@ -100,10 +102,11 @@
     <style>
         html,
         body {
-            background: linear-gradient(to bottom right, var(--bg-dark-overlay), var(--bg-dark-overlay)),
-                url('../images/header-background.jpg') center center / cover no-repeat fixed;
+            /* background: linear-gradient(to bottom right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+                url('../images/header-background.jpg') center center no-repeat !important; */
+            background-size: cover;
             font-family: 'Montserrat', sans-serif;
-            min-height: 100vh;
+            min-height: 110vh;
             margin: 0;
         }
 
@@ -114,7 +117,8 @@
         }
 
         .service-banner {
-            background: linear-gradient(135deg, #0b1224, #111827);
+            background: black;
+            background-size: cover;
             color: #ffffff;
             padding: 2rem;
             text-align: center;
@@ -145,16 +149,30 @@
             background: #fff;
             border-radius: 18px;
             padding: 1.75rem;
-            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
             margin-bottom: 1.75rem;
+        }
+
+        .summary-box h4 {
+            color: #000;
+        }
+
+        .summary-box p {
+            color: #000;
+        }
+
+        .summary-box strong {
+            color: #ffbd50;
         }
 
         .success-message {
             display: none;
             text-align: center;
             padding: 2rem;
-            background: #0f172a;
-            color: #f8fafc;
+            background: linear-gradient(to bottom right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+                url('../images/header-background.jpg') center center no-repeat;
+            background-size: cover;
+            color: #fff;
             border-radius: 18px;
         }
 
@@ -189,7 +207,7 @@
 
         .time-range .time-separator {
             font-weight: 700;
-            color: #111827;
+            color: #000;
         }
 
         .time-range select {
@@ -207,17 +225,15 @@
             display: flex;
             gap: 0.75rem;
             flex-wrap: wrap;
+            width: 100%;
         }
 
         .button-row .btn {
-            flex: 1 1 240px;
+            flex: 1 1 auto;
+            min-width: 200px;
+            width: 100%;
         }
 
-        .btn-outline-lg {
-            background: transparent;
-            color: #000;
-            border: 2px solid #000;
-        }
 
         .contact-row .form-control {
             height: 48px;
@@ -235,17 +251,41 @@
         }
 
         .button-row .btn {
-            background: #000;
-            color: #fff;
-            border: none;
-            padding: 1rem;
-            font-size: clamp(1rem, 1vw + 0.4rem, 1.25rem);
+            background: #ffbd50;
+            color: #000;
+            border: 2px solid #ffbd50;
+            padding: 1rem 1.25rem;
+            font-size: clamp(0.9rem, 2vw + 0.5rem, 1.25rem);
+            font-weight: 700;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 0.35rem;
             white-space: nowrap;
-            line-height: 1.2;
+            line-height: 1.3;
+            transition: all 0.2s;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            min-height: 48px;
+        }
+
+        .button-row .btn:hover {
+            background: #e6a845;
+            border-color: #e6a845;
+            color: #000;
+        }
+
+        .button-row .btn-outline-lg {
+            background: transparent;
+            color: #000;
+            border: 2px solid #000;
+        }
+
+        .button-row .btn-outline-lg:hover {
+            background: #ffbd50;
+            border-color: #ffbd50;
+            color: #000;
         }
 
         /* Keep first/last name aligned side by side while allowing shrink */
@@ -268,6 +308,7 @@
             height: 48px !important;
         }
 
+        /* Tablet/iPad portrait and phones (max-width: 768px) - layout only, colors unchanged */
         @media (max-width: 768px) {
             .form-container form {
                 padding: 1.25rem;
@@ -284,15 +325,20 @@
 
             .button-row {
                 flex-direction: column;
+                gap: 0.75rem;
             }
 
             .button-row .btn {
                 font-size: 1rem;
-                padding: 0.9rem 1rem;
+                padding: 1rem;
                 white-space: normal;
+                min-width: 100%;
+                width: 100%;
+                flex: 1 1 100%;
             }
         }
 
+        /* Small phones (max-width: 640px) - layout only, colors unchanged */
         @media (max-width: 640px) {
             .contact-row {
                 flex-wrap: wrap;
@@ -307,9 +353,36 @@
                 padding: 0.75rem 0.85rem;
             }
 
+            .button-row {
+                gap: 0.5rem;
+                flex-direction: column;
+            }
+
             .button-row .btn {
-                font-size: 0.95rem;
-                line-height: 1.3;
+                font-size: 0.9rem;
+                padding: 0.9rem 0.75rem;
+                line-height: 1.4;
+                min-height: 44px;
+                width: 100%;
+                min-width: 100%;
+                flex: 1 1 100%;
+            }
+
+            .button-row .btn .dynamicPrice {
+                display: inline-block;
+            }
+        }
+
+        /* Extra small phones (max-width: 480px) - ensure full width buttons */
+        @media (max-width: 480px) {
+            .button-row {
+                gap: 0.75rem;
+            }
+
+            .button-row .btn {
+                font-size: 0.85rem;
+                padding: 0.875rem 0.75rem;
+                min-height: 48px;
             }
         }
     </style>
@@ -444,9 +517,10 @@
         <input type="hidden" name="classStartTime" id="fs_classStartTime">
         <input type="hidden" name="classEndTime" id="fs_classEndTime">
         <input type="hidden" name="notes" id="fs_notes">
-        <input type="hidden" name="_subject" value="New Booking from Motion Drivers Ed">
+        <input type="hidden" name="_subject" value="Motion Drivers Ed - New Booking">
         <input type="hidden" name="_replyto" id="fs_replyto">
-        <input type="text" name="_gotcha" style="display:none">
+        <input type="hidden" name="_format" value="plain">
+        <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
     </form>
 
     <!-- Prevents new tab -->
@@ -454,191 +528,7 @@
 
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const params = new URLSearchParams(location.search);
-            const service = {
-                id: params.get('id') || 'unknown',
-                name: decodeURIComponent(params.get('name') || 'Driver Education'),
-                price: params.get('price') || '0',
-                square: params.get('square') || 'https://square.link/u/hel5wnyU'
-            };
-
-            const isClass = service.id.toLowerCase().startsWith('class');
-            const isDeposit = service.id.toLowerCase().includes('deposit');
-            const usesClassTime = isDeposit;
-            const FORMSPREE_URL = isClass
-                ? 'https://formspree.io/f/xblnpybl'   // Class form
-                : 'https://formspree.io/f/mnneovrj';  // Service form
-
-            // Update hidden form action
-            document.getElementById('formspreeHiddenForm').action = FORMSPREE_URL;
-
-            // Populate UI
-            document.getElementById('serviceName').textContent = service.name;
-            document.getElementById('servicePrice').textContent = `$${Number(service.price).toFixed(2)}`;
-            document.getElementById('summaryService').textContent = service.name;
-            document.getElementById('summaryTotal').textContent = `$${Number(service.price).toFixed(2)}`;
-            document.querySelectorAll('.dynamicPrice').forEach(el => {
-                el.textContent = Number(service.price).toFixed(2);
-            });
-
-            // Date rules
-            const dateInput = document.getElementById('preferredDate');
-            const today = new Date();
-            const todayDate = today.toISOString().split('T')[0];
-            const todayMonth = today.toISOString().slice(0, 7);
-            if (isClass) {
-                dateInput.type = 'month';
-                dateInput.min = todayMonth;
-            } else {
-                dateInput.type = 'date';
-                dateInput.min = todayDate;
-            }
-
-            const timeGroup = document.getElementById('timeGroup');
-            const classTimeGroup = document.getElementById('classTimeGroup');
-            const preferredTimeSelect = document.getElementById('preferredTime');
-            const classStartSelect = document.getElementById('classStartTime');
-            const classEndSelect = document.getElementById('classEndTime');
-
-            // Toggle time controls
-            if (isClass) {
-                timeGroup.style.display = 'none';
-                classTimeGroup.style.display = 'none';
-                preferredTimeSelect.removeAttribute('required');
-                classStartSelect.removeAttribute('required');
-                classEndSelect.removeAttribute('required');
-                document.getElementById('summaryTime').textContent = 'Scheduled after enrollment';
-                document.getElementById('dateLabel').textContent = 'Class Month *';
-            } else if (usesClassTime) {
-                timeGroup.style.display = 'none';
-                preferredTimeSelect.removeAttribute('required');
-                classTimeGroup.style.display = 'block';
-                classStartSelect.required = true;
-                classEndSelect.required = true;
-                document.getElementById('summaryTime').textContent = 'Select your class time';
-                document.getElementById('dateLabel').textContent = 'Confirm Date *';
-            } else {
-                classTimeGroup.style.display = 'none';
-                classStartSelect.removeAttribute('required');
-                classEndSelect.removeAttribute('required');
-            }
-
-            const formatTime = (time) => new Date(`2000-01-01T${time}`).toLocaleTimeString([], {
-                hour: 'numeric',
-                minute: '2-digit'
-            });
-
-            // Live summary update
-            const updateSummary = () => {
-                const date = dateInput.value;
-                const time = preferredTimeSelect.value;
-                const classStart = classStartSelect.value;
-                const classEnd = classEndSelect.value;
-
-                const dateLabel = (() => {
-                    if (!date) return 'Not selected';
-                    if (isClass) {
-                        return new Date(`${date}-01`).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-                    }
-                    return new Date(date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-                })();
-                document.getElementById('summaryDate').textContent = dateLabel;
-
-                let summaryTime = 'Not selected';
-                if (isClass) {
-                    summaryTime = 'Scheduled after enrollment';
-                } else if (usesClassTime) {
-                    summaryTime = classStart && classEnd ? `${formatTime(classStart)} - ${formatTime(classEnd)}` : 'Not selected';
-                } else if (time) {
-                    summaryTime = formatTime(time);
-                }
-                document.getElementById('summaryTime').textContent = summaryTime;
-            };
-            document.getElementById('preferredDate').addEventListener('change', updateSummary);
-            preferredTimeSelect.addEventListener('change', updateSummary);
-            classStartSelect.addEventListener('change', updateSummary);
-            classEndSelect.addEventListener('change', updateSummary);
-            updateSummary();
-
-            // MAIN SUBMIT HANDLER
-            document.getElementById('bookingForm').addEventListener('submit', function (e) {
-                e.preventDefault();
-
-                const btn = e.submitter || document.getElementById('payFullBtn');
-                btn.disabled = true;
-                btn.innerHTML = 'Processing... <i class="fas fa-spinner fa-spin"></i>';
-
-                const ref = 'MDE-' + Date.now().toString().slice(-6);
-                document.getElementById('bookingRef').textContent = ref;
-
-                // Show success
-                document.getElementById('successMessage').style.display = 'block';
-                document.getElementById('formContainer').style.display = 'none';
-
-                // Collect data
-                const classStartTime = usesClassTime ? classStartSelect.value : '';
-                const classEndTime = usesClassTime ? classEndSelect.value : '';
-                const preferredTimeValue = isClass
-                    ? 'Scheduled after enrollment'
-                    : usesClassTime
-                        ? (classStartTime && classEndTime ? `${classStartTime} - ${classEndTime}` : 'N/A')
-                        : (preferredTimeSelect.value || 'N/A');
-
-                const data = {
-                    ref,
-                    service: service.name,
-                    price: service.price,
-                    firstName: document.getElementById('firstName').value.trim(),
-                    lastName: document.getElementById('lastName').value.trim(),
-                    email: document.getElementById('email').value.trim(),
-                    phone: document.getElementById('phone').value.trim(),
-                    date: document.getElementById('preferredDate').value || 'TBD',
-                    time: preferredTimeValue,
-                    notes: document.getElementById('notes').value.trim(),
-                    classStartTime,
-                    classEndTime
-                };
-
-                // FILL HIDDEN FORMSPREE FORM
-                document.getElementById('fs_ref').value = data.ref;
-                document.getElementById('fs_service').value = data.service;
-                document.getElementById('fs_price').value = '$' + Number(data.price).toFixed(2);
-                document.getElementById('fs_firstName').value = data.firstName;
-                document.getElementById('fs_lastName').value = data.lastName;
-                document.getElementById('fs_email').value = data.email;
-                document.getElementById('fs_phone').value = data.phone;
-                document.getElementById('fs_date').value = data.date;
-                document.getElementById('fs_time').value = data.time;
-                document.getElementById('fs_classStartTime').value = data.classStartTime || '';
-                document.getElementById('fs_classEndTime').value = data.classEndTime || '';
-                document.getElementById('fs_notes').value = data.notes;
-                document.getElementById('fs_replyto').value = data.email;
-
-                // SUBMIT TO FORMSPREE (this WILL work)
-                document.getElementById('formspreeHiddenForm').submit();
-
-                // Save locally
-                localStorage.setItem('motionBooking', JSON.stringify(data));
-
-                // Build Square URL
-                let squareUrl = service.square;
-                squareUrl += `?prefill_email=${encodeURIComponent(data.email)}`;
-                squareUrl += `&prefill_name=${encodeURIComponent(data.firstName + ' ' + data.lastName)}`;
-                const timeNote = usesClassTime && data.classStartTime && data.classEndTime
-                    ? ` | Time: ${formatTime(data.classStartTime)} - ${formatTime(data.classEndTime)}`
-                    : (!usesClassTime && preferredTimeSelect.value ? ` | Time: ${formatTime(preferredTimeSelect.value)}` : '');
-                squareUrl += `&note=${encodeURIComponent(`Ref: ${ref} | ${data.service} | Date: ${data.date}${timeNote}`)}`;
-
-                // Redirect after 200ms
-                setTimeout(() => {
-                    window.location.href = squareUrl;
-                }, 200);
-            });
-        });
-    </script>
+    <script src="js/register.js"></script>
 
 </body>
 
