@@ -5,9 +5,10 @@
     <!-- Basic Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <!-- Content Security Policy -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://www.motiondriversed.com; font-src 'self' https://fonts.gstatic.com https://fonts.googleapis.com; connect-src 'self' https://formspree.io; frame-src 'self' https://square.link;">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://www.motiondriversed.com; font-src 'self' https://fonts.gstatic.com https://fonts.googleapis.com; connect-src 'self' https://formspree.io; frame-src 'self' https://square.link;">
     <!-- Page Title (Critical for SEO & CTR) -->
     <title>Register for Driving Lessons | Motion Drivers Ed - Book Your Class or Road Test Prep</title>
 
@@ -60,7 +61,7 @@
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/fontawesome-all.css" rel="stylesheet">
     <!-- <link href="css/styles.css" rel="stylesheet"> -->
-<link href="css/register.css?v=2" rel="stylesheet">
+    <link href="css/register.css?v=2" rel="stylesheet">
     <!-- Structured Data (JSON-LD) - Helps Google show rich results -->
     <script type="application/ld+json">
     {
@@ -152,9 +153,21 @@
             box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
             margin-bottom: 1.75rem;
         }
+        .summary-box{
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .summary-box div{
+            display: flex;
+            gap: 2em;
+            justify-content: space-between;
+        }
 
         .summary-box h4 {
             color: #000;
+            text-align: center;
         }
 
         .summary-box p {
@@ -404,10 +417,12 @@
                 <!-- Summary -->
                 <div class="summary-box">
                     <h4>Booking Summary</h4>
-                    <p><strong>Service:</strong> <span id="summaryService">-</span></p>
-                    <p><strong>Date:</strong> <span id="summaryDate">Not selected</span></p>
-                    <p><strong>Time:</strong> <span id="summaryTime">Not selected</span></p>
-                    <p><strong>Total:</strong> <span id="summaryTotal">$0.00</span></p>
+                    <div>
+                        <p><strong>Service:</strong> <span id="summaryService">-</span></p>
+                        <p><strong>Date:</strong> <span id="summaryDate">Not selected</span></p>
+                        <p><strong>Time:</strong> <span id="summaryTime">Not selected</span></p>
+                        <p><strong>Total:</strong> <span id="summaryTotal">$0.00</span></p>
+                    </div>
                 </div>
 
                 <!-- Success Message -->
