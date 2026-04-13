@@ -338,7 +338,7 @@ section[style*="background-color: black"] a:hover {
 	border: 0.125rem solid var(--primary-light);
 	/* background-color: var(--primary); */
 	/* background-color: #fff; */
-	color: white !important;
+	color: white;;
 	font-weight: 700;
 }
 
@@ -1195,6 +1195,8 @@ screen and (-ms-high-contrast: none) {
 
 .header .btn-solid-lg {
 	margin: 0 0.5rem 1.125rem;
+	background-color: var(--primary);
+	color: black;
 }
 
 .header .btn-solid-lg:hover {
@@ -1205,7 +1207,7 @@ screen and (-ms-high-contrast: none) {
 
 .header .btn-outline-lg {
 	border-color: white;
-	color: white
+	color: white;
 }
 
 .header .btn-outline-lg:hover {
@@ -1742,7 +1744,7 @@ screen and (-ms-high-contrast: none) {
 	font-weight: 700 !important;
 }
 
-.cards p {
+.cards p:not(.cta-drive__text):not(.cta-drive__note) {
 	text-align: center;
 	color: black !important;
 }
@@ -2794,7 +2796,7 @@ a:hover.back-to-top {
 
 	/* Description */
 	.basic-2 h2 {
-		width: 41rem;
+		/* width: 41rem; */
 		margin-right: auto;
 		margin-left: auto;
 		font-size: 4rem !important;
@@ -2969,6 +2971,7 @@ a:hover.back-to-top {
 	.header h1,
 	.header .p-large {
 		width: 47rem;
+		font-weight: bold;
 		margin-right: auto;
 		margin-left: auto;
 	}
@@ -4423,3 +4426,102 @@ section.basic-5-dark {
 	background-color: #000 !important;
 	background: #000 !important;
 } */
+
+
+/*** Additional custom styles for the registration page can be added here */
+/*******************************/
+/** style for the call-to-action section on the registration page **/
+/* CTA DRIVE SECTION */
+.cta-drive {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 3rem 2rem;
+  text-align: center;
+  color: #fff;
+  margin-bottom: 2rem;
+
+  background: url('../images/header-background.jpg') center center / cover no-repeat;
+}
+
+/* Dark overlay for readability */
+.cta-drive__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.75),
+    rgba(0, 0, 0, 0.85)
+  );
+  z-index: 1;
+}
+
+/* Content sits above overlay */
+.cta-drive__content {
+  position: relative;
+  z-index: 2;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Title */
+.cta-drive__title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+/* Main text */
+.cta-drive__text {
+  font-size: 1.1rem;
+  color: #fff;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+/* Button */
+.cta-drive__button {
+  display: inline-block;
+  padding: 0.9rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 999px;
+
+  background: #ff6a00;
+  color: #fff;
+  text-decoration: none;
+
+  transition: all 0.25s ease;
+  box-shadow: 0 8px 20px rgba(255, 106, 0, 0.3);
+}
+
+.cta-drive__button:hover {
+  transform: translateY(-2px);
+  background: #ff7f1f;
+  box-shadow: 0 12px 28px rgba(255, 106, 0, 0.4);
+}
+
+/* Small note */
+.cta-drive__note {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: #fff;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .cta-drive {
+    padding: 4rem 3rem;
+  }
+
+  .cta-drive__title {
+    font-size: 2.5rem;
+	color: white;
+  }
+
+  .cta-drive__text {
+    font-size: 1.2rem;
+	color: white;
+  }
+}
